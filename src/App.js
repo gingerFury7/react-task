@@ -29,49 +29,33 @@ class App extends Component {
       return "Loading...";
     }
 
-    let users = [];
-    let org = this.organizations;
-    let res = this.users.map(function(item){
-      return <div className="user-list-item">
+    // let users = [];
+    let res = this.users.map((item) => {
+      const org = this.organizations.find((o) => o.id === item.organizaiton)
+        .name;
+      return (
+        <div className="user-list-item" id={item.id}>
           <div>name: {item.name}</div>
-          <div onClick={() => this.selectOrg(org[item.organization].name)}>org: {org[item.organization].name}</div>
+          <div onClick={() => this.selectOrg(org)}>org: {org}</div>
         </div>
-    })
-
-    // for (let i = 0; i < this.users.length; i++) {
-    //   const name = this.users[i].name;
-    //   let org;
-
-    //   for (let j = 0; j < this.organizations.length; j++) {
-    //     if (this.organizations[j].id === this.users[i].organization) {
-    //       org = this.organizations[j].name;
-    //     }
-    //   }
-
-    //   users.push(
-    //     <div className="user-list-item">
-    //       <div>name: {name}</div>
-    //       <div onClick={() => this.selectOrg(org)}>org: {org}</div>
-    //     </div>
-    //   );
-    // }
+      );
+    });
 
     if (this.state.selectedOrg) {
-      users = [];
-      for (let i = 0; i < this.users.length; i++) {
-        const orgId = this.organizations.find(
-          (o) => o.name === this.state.selectedOrg
-        ).id;
+      // users = [];
 
-        if (this.users[i].organization === orgId) {
-          users.push(
-            <div className="user-list-item">
-              <div>name: {this.users[i].name}</div>
-              <div>org: {this.state.selectedOrg}</div>
-            </div>
-          );
-        }
-      }
+      this.users
+        .filter(
+          (item) =>
+            item.organizaiton ===
+            this.organizaitons.fund((o) => o.name === this.state.selectedOrg).id
+        )
+        .map((item) => (
+          <div className="user-list-item" key={item.id}>
+            <div>name: {item.name}</div>
+            <div>org: {this.state.selectedOrg}</div>
+          </div>
+        ));
     }
 
     return (
